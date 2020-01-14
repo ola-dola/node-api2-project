@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
+const ringsRouter = require('./data/db-router');
 
 const server = express();
 
 //middlewares?
 server.use(express.json());
 server.use(cors());
+server.use('/api/posts', ringsRouter);
 
 server.get('/', (req, res) => {
     res.status(200);
