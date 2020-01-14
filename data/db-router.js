@@ -59,4 +59,27 @@ router.get("/:id/comments", (req, res) => {
     });
 });
 
+//add new post
+router.post("/", (req, res) => {
+	const post = req.body;
+
+  if (!post.title || !post.contents) {
+    res.status(400).json({
+      errorMessage: "Please provide title and contents for the post."
+    });
+  }
+  DbHelpers.insert(post)
+    .then(data => {
+			//Grabbing the newly created post to return.
+      DbHelpers.findById(data.id).then(newPost => {
+				res.status(201).json(...newPost);  //new post returned
+			}).catch(error => console.log(error));
+
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: "There was an error while saving the post to the database"
+      });
+    });
+});
 module.exports = router;
